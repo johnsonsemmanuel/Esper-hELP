@@ -97,30 +97,21 @@ export default function HomePage() {
                 </motion.div>
 
                 {/* Rotating message */}
-                <div className="mb-6">
-                  <div className="h-10 relative">
+                <div className="mb-8">
+                  <div className="h-14 sm:h-16 relative">
                     {rotatingMessages.map((msg, i) => (
                       <motion.span
                         key={msg}
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={i === messageIndex ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={i === messageIndex ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
                         transition={{ duration: 0.4 }}
-                        className="text-xl sm:text-2xl font-bold text-white absolute left-0"
+                        className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white absolute left-0"
                       >
                         {msg}
                       </motion.span>
                     ))}
                   </div>
                 </div>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="text-sm text-gray-400 leading-relaxed mb-8 max-w-sm"
-                >
-                  Launch, share, get funded. Built for Africa.
-                </motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
