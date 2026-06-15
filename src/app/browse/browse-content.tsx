@@ -129,11 +129,11 @@ export default function BrowseContent() {
               >
                 <Link href={`/campaign/${campaign.slug}`}>
                   <Card className="overflow-hidden h-full">
-                    <div className={`h-48 ${campaign.coverImage ? "" : "bg-pink-100"} flex items-center justify-center`}>
+                    <div className={`h-48 ${campaign.coverImage ? "" : "bg-gray-100"} flex items-center justify-center overflow-hidden`}>
                       {campaign.coverImage ? (
                         <img src={campaign.coverImage} alt={campaign.title} className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-6xl opacity-40">📋</span>
+                        <img src={`https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=400&fit=crop&sig=${campaign.id}`} alt={campaign.title} className="w-full h-full object-cover opacity-60" />
                       )}
                     </div>
                     <CardContent>

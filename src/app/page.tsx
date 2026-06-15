@@ -38,9 +38,22 @@ const fadeInUp = {
   transition: { duration: 0.6 },
 }
 
+const rotatingMessages = [
+  "Fund your Business",
+  "Back a Dream",
+  "Help a Community",
+  "Support a Cause",
+]
+
 export default function HomePage() {
   const [featuredCampaigns, setFeaturedCampaigns] = useState<any[]>([])
   const [loadingFeatured, setLoadingFeatured] = useState(true)
+  const [messageIndex, setMessageIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => setMessageIndex((i) => (i + 1) % rotatingMessages.length), 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     async function fetchFeatured() {
@@ -71,54 +84,59 @@ export default function HomePage() {
             <div className="grid lg:grid-cols-2 gap-16 items-center min-h-svh py-24">
               {/* Left Content */}
               <ContainerAnimated className="flex flex-col justify-center" outputRange={[40, 0]}>
-                {/* Badge */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="flex items-center gap-2 mb-8"
+                  className="mb-6"
                 >
-                  <span className="flex items-center gap-1.5 text-xs font-medium text-pink-300 bg-pink-500/10 border border-pink-500/20 rounded-full px-3 py-1.5">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-pink-300 bg-pink-500/10 border border-pink-500/20 rounded-full px-3 py-1.5">
                     <Sparkles className="w-3 h-3" />
-                    Africa's business fundraising platform
+                    Africa's fundraising platform
                   </span>
                 </motion.div>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
-                >
-                  Raise Funds from{" "}
-                  <span className="text-pink-400 underline decoration-pink-500/30 decoration-4 underline-offset-8">Supporters</span>
-                  {" "}Who Believe in Your Business
-                </motion.h1>
+                {/* Rotating message */}
+                <div className="mb-6">
+                  <div className="h-10 relative">
+                    {rotatingMessages.map((msg, i) => (
+                      <motion.span
+                        key={msg}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={i === messageIndex ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+                        transition={{ duration: 0.4 }}
+                        className="text-xl sm:text-2xl font-bold text-white absolute left-0"
+                      >
+                        {msg}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
 
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.6 }}
-                  className="text-lg text-gray-400 leading-relaxed mb-10 max-w-lg"
+                  className="text-sm text-gray-400 leading-relaxed mb-8 max-w-sm"
                 >
-                  Launch a campaign, share with your network, and get funded by people who want to see you win. Built for African businesses.
+                  Launch, share, get funded. Built for Africa.
                 </motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="flex flex-wrap gap-4"
+                  className="flex flex-wrap gap-3"
                 >
                   <Link href="/register">
-                    <Button size="lg" className="text-base px-8 h-12 rounded-full shadow-lg shadow-pink-500/25">
-                      Start Your Campaign
-                      <ArrowRight className="ml-2 w-5 h-5" />
+                    <Button className="text-sm px-6 h-10 rounded-full shadow-lg shadow-pink-500/25">
+                      Start Campaign
+                      <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   </Link>
                   <Link href="/browse">
-                    <Button variant="outline" size="lg" className="text-base border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white px-8 h-12 rounded-full">
-                      Explore Campaigns
+                    <Button variant="outline" className="text-sm border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white px-6 h-10 rounded-full">
+                      Explore
                     </Button>
                   </Link>
                 </motion.div>
@@ -128,12 +146,12 @@ export default function HomePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7, duration: 0.6 }}
-                  className="flex items-center gap-8 mt-12 pt-8 border-t border-gray-800"
+                  className="flex items-center gap-6 mt-8 pt-5 border-t border-gray-800"
                 >
                   {stats.slice(0, 3).map((stat) => (
                     <div key={stat.label}>
-                      <p className="text-2xl font-bold text-white">{stat.value}</p>
-                      <p className="text-sm text-gray-500">{stat.label}</p>
+                      <p className="text-lg font-bold text-white">{stat.value}</p>
+                      <p className="text-xs text-gray-500">{stat.label}</p>
                     </div>
                   ))}
                 </motion.div>
@@ -337,9 +355,9 @@ export default function HomePage() {
                 ) : featuredCampaigns.length === 0 ? (
                   <>
                     {[
-                      { title: "SmartFarm Kenya", category: "Agriculture", raised: "₵4.2M", goal: "₵8M", progress: 53, supporters: 128, image: "" },
-                      { title: "CodeCamp Lagos", category: "Education", raised: "₵6.8M", goal: "₵10M", progress: 68, supporters: 245, image: "" },
-                      { title: "Green Energy Ghana", category: "Environment", raised: "₵12.1M", goal: "₵15M", progress: 81, supporters: 312, image: "" },
+                      { title: "SmartFarm Kenya", category: "Agriculture", raised: "₵4.2M", goal: "₵8M", progress: 53, supporters: 128, image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&h=400&fit=crop" },
+                      { title: "CodeCamp Lagos", category: "Education", raised: "₵6.8M", goal: "₵10M", progress: 68, supporters: 245, image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=400&fit=crop" },
+                      { title: "Green Energy Ghana", category: "Environment", raised: "₵12.1M", goal: "₵15M", progress: 81, supporters: 312, image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&h=400&fit=crop" },
                     ].map((campaign, index) => (
                       <motion.div
                         key={campaign.title}
@@ -349,8 +367,8 @@ export default function HomePage() {
                         transition={{ delay: index * 0.1 }}
                       >
                         <Card className="overflow-hidden h-full">
-                          <div className="h-48 bg-pink-100 flex items-center justify-center">
-                            <ImageIcon className="w-12 h-12 text-pink-300" />
+                          <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                            <img src={campaign.image} alt={campaign.title} className="w-full h-full object-cover" />
                           </div>
                           <CardContent>
                             <div className="flex items-center gap-2 mb-3">
