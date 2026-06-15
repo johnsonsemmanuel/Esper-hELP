@@ -217,11 +217,12 @@ export default function HomePage() {
             </div>
           </div>
         </ContainerSticky>
+      </ContainerScroll>
 
-        {/* Below-hero content */}
-        <div className="relative z-10 bg-white">
-          {/* Stats Bar - overlap transition */}
-          <motion.section {...fadeInUp} className="py-16 bg-white border-b border-gray-100">
+      {/* Below-hero content */}
+      <div className="relative z-10 bg-white">
+        {/* Stats Bar */}
+        <motion.section {...fadeInUp} className="py-16 bg-white border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 {stats.map((stat) => (
@@ -463,7 +464,6 @@ export default function HomePage() {
             </div>
           </section>
         </div>
-      </ContainerScroll>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -27,8 +27,15 @@ const categories = [
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const { user, status, signOut } = useAuth()
   const pathname = usePathname()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   const isActive = (href: string) => {
     const base = href.split("?")[0]
@@ -37,7 +44,12 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-4 px-4">
-      <div className="flex items-center gap-4 h-14 px-3 sm:px-5 rounded-full bg-white/75 backdrop-blur-xl border border-white/30 shadow-lg shadow-black/[0.03] w-full max-w-5xl">
+      <div className={cn(
+        "flex items-center gap-4 h-14 px-3 sm:px-5 rounded-full transition-all duration-300 w-full max-w-5xl",
+        scrolled
+          ? "bg-white/75 backdrop-blur-xl border border-white/30 shadow-lg shadow-black/[0.03]"
+          : "bg-transparent border border-white/10",
+      )}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
           <div className="w-8 h-8 bg-pink-600 rounded-lg flex items-center justify-center shadow-sm">
