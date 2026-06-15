@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${manrope.className} antialiased bg-gray-50 text-gray-900`}>
         <Providers>
           <Navbar />
-          <main className="min-h-screen pt-16">{children}</main>
+          <main className="min-h-screen pt-20">{children}</main>
           <Footer />
         </Providers>
       </body>

@@ -1,21 +1,23 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Briefcase, Users, BookOpen, HeartPulse, Sprout, Monitor, ImageIcon } from "lucide-react"
+import { Briefcase, Users, BookOpen, HeartPulse, Sprout, Monitor, ImageIcon, ArrowRight, Sparkles, TrendingUp, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { formatCurrency, timeAgo, progressPercentage } from "@/lib/utils"
 import {
   ContainerScroll,
   ContainerSticky,
   ContainerAnimated,
   ContainerInset,
-  HeroButton,
 } from "@/components/ui/container-scroll"
 
 const stats = [
-  { label: "Active Campaigns", value: "2,400+" },
   { label: "Funds Raised", value: "₵850M+" },
+  { label: "Active Campaigns", value: "2,400+" },
   { label: "Supporters", value: "50,000+" },
   { label: "Countries", value: "15+" },
 ]
@@ -37,99 +39,177 @@ const fadeInUp = {
 }
 
 export default function HomePage() {
+  const [featuredCampaigns, setFeaturedCampaigns] = useState<any[]>([])
+  const [loadingFeatured, setLoadingFeatured] = useState(true)
+
+  useEffect(() => {
+    async function fetchFeatured() {
+      try {
+        const res = await fetch("/api/campaigns?limit=3&sort=most_funded")
+        const data = await res.json()
+        setFeaturedCampaigns(data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoadingFeatured(false)
+      }
+    }
+    fetchFeatured()
+  }, [])
   return (
     <div>
       {/* Hero */}
       <ContainerScroll>
-        <ContainerSticky className="flex items-center bg-gray-900 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+        <ContainerSticky className="flex items-center bg-gray-950 overflow-hidden">
+          {/* Subtle grid overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
+
+          {/* Ambient glow */}
+          <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-[120px]" />
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-svh py-20">
+            <div className="grid lg:grid-cols-2 gap-16 items-center min-h-svh py-24">
               {/* Left Content */}
-              <ContainerAnimated className="flex flex-col justify-center" inputRange={[0.1, 0.5]} outputRange={[60, 0]}>
-                <HeroButton className="mb-6">
-                  <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
-                  <span className="text-sm font-medium text-pink-300">Trusted across Africa</span>
-                </HeroButton>
+              <ContainerAnimated className="flex flex-col justify-center" outputRange={[40, 0]}>
+                {/* Badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex items-center gap-2 mb-8"
+                >
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-pink-300 bg-pink-500/10 border border-pink-500/20 rounded-full px-3 py-1.5">
+                    <Sparkles className="w-3 h-3" />
+                    Africa's business fundraising platform
+                  </span>
+                </motion.div>
 
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                  Raise Funds for What{" "}
-                  <span className="text-pink-400">Matters Most</span>
-                </h1>
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
+                >
+                  Raise Funds from{" "}
+                  <span className="text-pink-400 underline decoration-pink-500/30 decoration-4 underline-offset-8">Supporters</span>
+                  {" "}Who Believe in Your Business
+                </motion.h1>
 
-                <p className="text-lg text-gray-300 leading-relaxed mb-8 max-w-lg">
-                  The fundraising platform built for African businesses and agencies. Launch your campaign in minutes, reach global supporters, and bring your vision to life.
-                </p>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="text-lg text-gray-400 leading-relaxed mb-10 max-w-lg"
+                >
+                  Launch a campaign, share with your network, and get funded by people who want to see you win. Built for African businesses.
+                </motion.p>
 
-                <div className="flex flex-wrap gap-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  className="flex flex-wrap gap-4"
+                >
                   <Link href="/register">
-                    <Button size="lg" className="text-base px-8">
+                    <Button size="lg" className="text-base px-8 h-12 rounded-full shadow-lg shadow-pink-500/25">
                       Start Your Campaign
-                      <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
+                      <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
                   <Link href="/browse">
-                    <Button variant="outline" size="lg" className="text-base border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white px-8">
+                    <Button variant="outline" size="lg" className="text-base border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white px-8 h-12 rounded-full">
                       Explore Campaigns
                     </Button>
                   </Link>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center gap-8 mt-10 pt-8 border-t border-gray-800">
+                {/* Trust indicators */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                  className="flex items-center gap-8 mt-12 pt-8 border-t border-gray-800"
+                >
                   {stats.slice(0, 3).map((stat) => (
                     <div key={stat.label}>
                       <p className="text-2xl font-bold text-white">{stat.value}</p>
-                      <p className="text-sm text-gray-400">{stat.label}</p>
+                      <p className="text-sm text-gray-500">{stat.label}</p>
                     </div>
                   ))}
-                </div>
+                </motion.div>
               </ContainerAnimated>
 
-              {/* Right - Campaign Card inside Inset */}
+              {/* Right - Campaign Card with scroll reveal */}
               <ContainerInset
-                insetYRange={[30, 0]}
-                insetXRange={[30, 0]}
+                insetYRange={[35, 0]}
+                insetXRange={[35, 0]}
                 roundednessRange={[1000, 24]}
-                className="hidden lg:block"
+                className="hidden lg:flex items-center justify-center"
               >
-                <div className="relative">
-                  <div className="absolute -top-4 -left-4 w-72 h-72 bg-pink-500/20 rounded-full blur-3xl" />
-                  <div className="absolute -bottom-8 -right-8 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
-                  <div className="relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50 p-8 pointer-events-auto">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 pb-4 border-b border-gray-700/50">
-                        <div className="w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center">
-                          <span className="text-pink-400 text-lg">₵</span>
+                <div className="w-full max-w-md">
+                  <div className="bg-gray-900/60 backdrop-blur-2xl rounded-3xl border border-gray-800/60 p-8 shadow-2xl shadow-black/40 pointer-events-auto">
+                    {/* Card header */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-500/30">
+                          <TrendingUp className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <p className="text-white font-semibold">TechUp Africa</p>
-                          <p className="text-gray-400 text-sm">Technology & Innovation</p>
+                          <p className="text-white font-semibold text-lg">TechUp Africa</p>
+                          <p className="text-gray-500 text-sm">Technology & Innovation</p>
                         </div>
                       </div>
-                      <div className="space-y-3">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Raised</span>
-                          <span className="text-white font-semibold">₵12,450,000</span>
-                        </div>
-                        <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-                          <div className="w-3/4 h-full bg-pink-500 rounded-full" />
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Goal: ₵15,000,000</span>
-                          <span className="text-pink-400">83%</span>
-                        </div>
+                      <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
+                        Featured
+                      </span>
+                    </div>
+
+                    {/* Progress */}
+                    <div className="space-y-3 mb-6">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Raised</span>
+                        <span className="text-white font-bold text-lg">₵12,450,000</span>
                       </div>
-                      <div className="flex -space-x-2 pt-2">
+                      <div className="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: "83%" }}
+                          transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
+                          className="h-full bg-pink-500 rounded-full"
+                        />
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Goal: ₵15,000,000</span>
+                        <span className="text-pink-400 font-semibold">83%</span>
+                      </div>
+                    </div>
+
+                    {/* Supporters */}
+                    <div className="flex items-center justify-between mb-6 pt-4 border-t border-gray-800/60">
+                      <div className="flex -space-x-2">
                         {[1, 2, 3, 4].map((i) => (
-                          <div key={i} className="w-8 h-8 rounded-full bg-gray-600 border-2 border-gray-800" />
+                          <div
+                            key={i}
+                            className="w-8 h-8 rounded-full bg-gray-700 border-2 border-gray-900 ring-2 ring-gray-900"
+                          />
                         ))}
-                        <div className="w-8 h-8 rounded-full bg-pink-500/20 border-2 border-gray-800 flex items-center justify-center">
-                          <span className="text-pink-400 text-xs font-semibold">+42</span>
+                        <div className="w-8 h-8 rounded-full bg-pink-500/20 border-2 border-gray-900 flex items-center justify-center ring-2 ring-gray-900">
+                          <span className="text-pink-400 text-xs font-bold">+42</span>
                         </div>
                       </div>
+                      <span className="text-gray-400 text-sm">46 supporters</span>
+                    </div>
+
+                    {/* CTA */}
+                    <button className="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-pink-500/20">
+                      Support This Campaign
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+
+                    {/* Location */}
+                    <div className="flex items-center justify-center gap-1.5 mt-4 text-xs text-gray-600">
+                      <MapPin className="w-3 h-3" />
+                      Accra, Ghana
                     </div>
                   </div>
                 </div>
@@ -138,10 +218,10 @@ export default function HomePage() {
           </div>
         </ContainerSticky>
 
-        {/* Below-hero content that catches up on scroll */}
+        {/* Below-hero content */}
         <div className="relative z-10 bg-white">
-          {/* Stats Bar */}
-          <motion.section {...fadeInUp} className="py-12 bg-white border-b border-gray-100">
+          {/* Stats Bar - overlap transition */}
+          <motion.section {...fadeInUp} className="py-16 bg-white border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 {stats.map((stat) => (
@@ -158,6 +238,7 @@ export default function HomePage() {
           <section className="py-20 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <motion.div {...fadeInUp} className="text-center mb-12">
+                <span className="text-xs font-semibold text-pink-600 uppercase tracking-widest mb-2 block">Categories</span>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">Fund What Matters to You</h2>
                 <p className="text-gray-500 max-w-xl mx-auto">
                   From business ventures to community causes, find campaigns that resonate with you.
@@ -175,7 +256,7 @@ export default function HomePage() {
                     whileHover={{ y: -8 }}
                   >
                     <Link href={`/browse?category=${cat.slug}`}>
-                      <Card className="text-center p-6 h-full">
+                      <Card className="text-center p-6 h-full cursor-pointer">
                         <div className={`w-12 h-12 rounded-xl ${cat.color} flex items-center justify-center mx-auto mb-3`}>
                           <cat.icon className="w-6 h-6" />
                         </div>
@@ -192,6 +273,7 @@ export default function HomePage() {
           <section className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <motion.div {...fadeInUp} className="text-center mb-16">
+                <span className="text-xs font-semibold text-pink-600 uppercase tracking-widest mb-2 block">Process</span>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
                 <p className="text-gray-500 max-w-xl mx-auto">Three simple steps to start raising funds for your project.</p>
               </motion.div>
@@ -223,86 +305,158 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Featured Campaigns Preview */}
+          {/* Featured Campaigns */}
           <section className="py-20 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <motion.div {...fadeInUp} className="flex items-center justify-between mb-12">
+              <motion.div {...fadeInUp} className="flex items-end justify-between mb-12">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Featured Campaigns</h2>
+                  <span className="text-xs font-semibold text-pink-600 uppercase tracking-widest mb-2 block">Featured</span>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Active Campaigns</h2>
                   <p className="text-gray-500">Projects that are making an impact right now</p>
                 </div>
                 <Link href="/browse">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="rounded-full">
                     View All
-                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                    <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
               </motion.div>
 
               <div className="grid md:grid-cols-3 gap-6">
-                {[
-                  { title: "SmartFarm Kenya", category: "Agriculture", raised: "₵4.2M", goal: "₵8M", progress: 53, supporters: 128, image: "" },
-                  { title: "CodeCamp Lagos", category: "Education", raised: "₵6.8M", goal: "₵10M", progress: 68, supporters: 245, image: "" },
-                  { title: "Green Energy Ghana", category: "Environment", raised: "₵12.1M", goal: "₵15M", progress: 81, supporters: 312, image: "" },
-                ].map((campaign, index) => (
-                  <motion.div
-                    key={campaign.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Card className="overflow-hidden h-full">
-                      <div className="h-48 bg-pink-100 flex items-center justify-center">
-                        <ImageIcon className="w-12 h-12 text-pink-300" />
-                      </div>
-                      <CardContent>
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">
-                            {campaign.category}
-                          </span>
-                        </div>
-                        <h3 className="font-bold text-gray-900 mb-2">{campaign.title}</h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-500">Raised: {campaign.raised}</span>
-                            <span className="text-gray-500">Goal: {campaign.goal}</span>
+                {loadingFeatured ? (
+                  [1, 2, 3].map((i) => (
+                    <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse">
+                      <div className="h-48 bg-gray-100 rounded-xl mb-4" />
+                      <div className="h-4 bg-gray-100 rounded w-1/3 mb-3" />
+                      <div className="h-6 bg-gray-100 rounded w-2/3 mb-3" />
+                      <div className="h-2 bg-gray-100 rounded mb-2" />
+                      <div className="h-4 bg-gray-100 rounded w-1/2" />
+                    </div>
+                  ))
+                ) : featuredCampaigns.length === 0 ? (
+                  <>
+                    {[
+                      { title: "SmartFarm Kenya", category: "Agriculture", raised: "₵4.2M", goal: "₵8M", progress: 53, supporters: 128, image: "" },
+                      { title: "CodeCamp Lagos", category: "Education", raised: "₵6.8M", goal: "₵10M", progress: 68, supporters: 245, image: "" },
+                      { title: "Green Energy Ghana", category: "Environment", raised: "₵12.1M", goal: "₵15M", progress: 81, supporters: 312, image: "" },
+                    ].map((campaign, index) => (
+                      <motion.div
+                        key={campaign.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Card className="overflow-hidden h-full">
+                          <div className="h-48 bg-pink-100 flex items-center justify-center">
+                            <ImageIcon className="w-12 h-12 text-pink-300" />
                           </div>
-                          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              whileInView={{ width: `${campaign.progress}%` }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 1, delay: 0.3 }}
-                              className="h-full bg-pink-500 rounded-full"
-                            />
+                          <CardContent>
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">
+                                {campaign.category}
+                              </span>
+                            </div>
+                            <h3 className="font-bold text-gray-900 mb-2">{campaign.title}</h3>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Raised: {campaign.raised}</span>
+                                <span className="text-gray-500">Goal: {campaign.goal}</span>
+                              </div>
+                              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  whileInView={{ width: `${campaign.progress}%` }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 1, delay: 0.3 }}
+                                  className="h-full bg-pink-500 rounded-full"
+                                />
+                              </div>
+                              <div className="flex justify-between text-xs text-gray-400">
+                                <span>{campaign.progress}% funded</span>
+                                <span>{campaign.supporters} supporters</span>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </>
+                ) : (
+                  featuredCampaigns.map((campaign, index) => (
+                    <motion.div
+                      key={campaign.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Link href={`/campaign/${campaign.slug}`}>
+                        <Card className="overflow-hidden h-full cursor-pointer">
+                          <div className={`h-48 ${campaign.coverImage ? "" : "bg-pink-100"} flex items-center justify-center overflow-hidden`}>
+                            {campaign.coverImage ? (
+                              <img src={campaign.coverImage} alt={campaign.title} className="w-full h-full object-cover" />
+                            ) : (
+                              <ImageIcon className="w-12 h-12 text-pink-300" />
+                            )}
                           </div>
-                          <div className="flex justify-between text-xs text-gray-400">
-                            <span>{campaign.progress}% funded</span>
-                            <span>{campaign.supporters} supporters</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
+                          <CardContent>
+                            <div className="flex items-center gap-2 mb-3">
+                              {campaign.category && (
+                                <Badge variant="info">{campaign.category.name}</Badge>
+                              )}
+                              <Badge variant={campaign.status === "active" ? "success" : "default"}>
+                                {campaign.campaignType === "business" ? "Business" : campaign.campaignType === "personal" ? "Personal" : "NGO"}
+                              </Badge>
+                            </div>
+                            <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">{campaign.title}</h3>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="font-semibold text-gray-900">
+                                  {formatCurrency(campaign.raisedAmount, campaign.currency)}
+                                </span>
+                                <span className="text-gray-500">
+                                  of {formatCurrency(campaign.goalAmount, campaign.currency)}
+                                </span>
+                              </div>
+                              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  whileInView={{ width: `${progressPercentage(campaign.raisedAmount, campaign.goalAmount)}%` }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 1, delay: 0.3 }}
+                                  className="h-full bg-pink-500 rounded-full"
+                                />
+                              </div>
+                              <div className="flex justify-between text-xs text-gray-400">
+                                <span>{progressPercentage(campaign.raisedAmount, campaign.goalAmount)}% funded</span>
+                                <span>{campaign._count?.donations || 0} supporters</span>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    </motion.div>
+                  ))
+                )}
               </div>
             </div>
           </section>
 
           {/* CTA */}
-          <section className="py-20 bg-pink-700 relative overflow-hidden">
+          <section className="py-24 bg-pink-700 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]" />
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
               <motion.div {...fadeInUp}>
+                <span className="text-xs font-semibold text-pink-200 uppercase tracking-widest mb-2 block">Get Started</span>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Bring Your Project to Life?</h2>
                 <p className="text-pink-100 mb-8 max-w-lg mx-auto">
                   Join thousands of African businesses and creators who have raised funds on hELP Fund.
                 </p>
                 <Link href="/register">
-                  <Button size="lg" className="bg-white text-pink-700 hover:bg-pink-50 text-base px-10">
+                  <Button size="lg" className="bg-white text-pink-700 hover:bg-pink-50 text-base px-10 h-12 rounded-full shadow-xl">
                     Start Your Campaign Free
+                    <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
               </motion.div>

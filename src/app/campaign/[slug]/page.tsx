@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ImageIcon } from "lucide-react"
+import { ImageIcon, Share2, Shield, MessageCircle, Copy, Smartphone } from "lucide-react"
 import { formatCurrency, timeAgo, progressPercentage } from "@/lib/utils"
 
 const currencySymbols: Record<string, string> = {
@@ -133,6 +133,9 @@ export default function CampaignDetailPage() {
             <div className="mt-6">
               <div className="flex items-center gap-3 mb-3">
                 {campaign.category && <Badge variant="info">{campaign.category.name}</Badge>}
+                <Badge variant={campaign.campaignType === "business" ? "warning" : campaign.campaignType === "personal" ? "success" : "info"}>
+                  {campaign.campaignType === "business" ? "Business" : campaign.campaignType === "personal" ? "Personal" : "NGO"}
+                </Badge>
                 <Badge variant="success">{campaign.status}</Badge>
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{campaign.title}</h1>
@@ -293,41 +296,68 @@ export default function CampaignDetailPage() {
               </Button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-gray-100">
+            <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
               <div className="flex items-center gap-2 text-sm text-gray-500">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+                <Shield className="w-4 h-4" />
                 Secured with 256-bit encryption
               </div>
+              {campaign.currency === "GHS" && (
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Smartphone className="w-4 h-4" />
+                  Pay with MTN MoMo, AirtelTigo, or card
+                </div>
+              )}
             </div>
           </Card>
 
           <Card className="p-6 mt-6">
             <h3 className="font-semibold text-gray-900 mb-4">Share This Campaign</h3>
-            <div className="flex gap-2">
-              {["WhatsApp", "Twitter", "Facebook", "Copy"].map((platform) => (
-                <button
-                  key={platform}
-                  onClick={() => {
-                    const url = window.location.href
-                    if (platform === "Copy") {
-                      navigator.clipboard.writeText(url)
-                    } else {
-                      window.open(
-                        platform === "WhatsApp"
-                          ? `https://wa.me/?text=${encodeURIComponent(url)}`
-                          : platform === "Twitter"
-                          ? `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`
-                          : `https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
-                      )
-                    }
-                  }}
-                  className="flex-1 py-2 text-xs font-semibold rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                >
-                  {platform}
-                </button>
-              ))}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => {
+                  const url = window.location.href
+                  const text = `Support "${campaign.title}" on hELP Fund`
+                  window.open(`https://wa.me/?text=${encodeURIComponent(text + "\n" + url)}`)
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-xl bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-200"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </button>
+              <button
+                onClick={() => {
+                  const url = window.location.href
+                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent("Support this campaign on hELP Fund")}&url=${encodeURIComponent(url)}`)
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
+              >
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                Share
+              </button>
+              <button
+                onClick={() => {
+                  const url = window.location.href
+                  window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`)
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors border border-blue-200"
+              >
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="#1877F2">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                Facebook
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href)
+                  alert("Link copied to clipboard!")
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-xl bg-pink-50 text-pink-600 hover:bg-pink-100 transition-colors border border-pink-200"
+              >
+                <Copy className="w-4 h-4" />
+                Copy Link
+              </button>
             </div>
           </Card>
         </motion.div>
@@ -342,28 +372,48 @@ export default function CampaignDetailPage() {
         >
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Supporters</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {campaign.donations.filter((d: any) => d.status === "successful").slice(0, 6).map((donation: any) => (
-              <Card key={donation.id} hover={false} className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold text-sm">
-                    {(donation.donorName || "A")[0]}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">
-                      {donation.anonymous ? "Anonymous" : donation.donorName || "Anonymous"}
-                    </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-400">
-                      <span>Donated {formatCurrency(donation.amount, donation.currency)}</span>
-                      <span>•</span>
-                      <span>{timeAgo(new Date(donation.createdAt))}</span>
+            {campaign.donations.filter((d: any) => d.status === "successful").slice(0, 6).map((donation: any, idx: number) => {
+              const badges = [
+                { emoji: "🥇", label: "Top Sponsor", class: "bg-amber-100 text-amber-700 border-amber-200" },
+                { emoji: "🥈", label: "Top Supporter", class: "bg-gray-100 text-gray-600 border-gray-200" },
+                { emoji: "🥉", label: "Top Supporter", class: "bg-orange-100 text-orange-700 border-orange-200" },
+              ]
+              const badge = idx < 3 ? badges[idx] : null
+              return (
+                <Card key={donation.id} hover={false} className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                        {(donation.donorName || "A")[0]}
+                      </div>
+                      {badge && (
+                        <span className="absolute -top-1.5 -right-1.5 text-xs">{badge.emoji}</span>
+                      )}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-gray-900 text-sm">
+                          {donation.anonymous ? "Anonymous" : donation.donorName || "Anonymous"}
+                        </p>
+                        {badge && (
+                          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${badge.class}`}>
+                            {badge.label}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-400">
+                        <span>Donated {formatCurrency(donation.amount, donation.currency)}</span>
+                        <span>•</span>
+                        <span>{timeAgo(new Date(donation.createdAt))}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                {donation.message && (
-                  <p className="text-sm text-gray-500 mt-2 italic">&ldquo;{donation.message}&rdquo;</p>
-                )}
-              </Card>
-            ))}
+                  {donation.message && (
+                    <p className="text-sm text-gray-500 mt-2 italic">&ldquo;{donation.message}&rdquo;</p>
+                  )}
+                </Card>
+              )
+            })}
           </div>
         </motion.div>
       )}
