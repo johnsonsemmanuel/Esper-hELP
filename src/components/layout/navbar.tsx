@@ -133,8 +133,8 @@ export function Navbar() {
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">Dashboard</Button>
               </Link>
-              <Link href="/campaigns/new">
-                <Button size="sm" className="rounded-full">Start Campaign</Button>
+                <Link href="/dashboard/campaigns/new">
+                  <Button size="sm" className="rounded-full">Start Campaign</Button>
               </Link>
               <button
                 onClick={() => signOut()}
