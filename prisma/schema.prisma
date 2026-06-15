@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  emailVerified DateTime?
+  image     String?
+  password  String?
+  phone     String?
+  bio       String?
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts   Account[]
+  sessions   Session[]
+  campaigns  Campaign[]
+  donations  Donation[]
+  activities Activity[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  icon        String?
+  createdAt   DateTime   @default(now())
+  campaigns   Campaign[]
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  story       String
+  goalAmount  Float
+  raisedAmount Float   @default(0)
+  currency    String   @default("NGN")
+  status      String   @default("draft")
+  coverImage  String?
+  videoUrl    String?
+  location    String?
+  country     String?
+  categoryId  String?
+  userId      String
+  deadline    DateTime?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media       CampaignMedia[]
+  donations   Donation[]
+  updates     CampaignUpdate[]
+  activities  Activity[]
+}
+
+model CampaignMedia {
+  id         String   @id @default(cuid())
+  campaignId String
+  url        String
+  type       String
+  alt        String?
+  createdAt  DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignUpdate {
+  id         String   @id @default(cuid())
+  campaignId String
+  content    String
+  createdAt  DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model Donation {
+  id          String   @id @default(cuid())
+  amount      Float
+  currency    String   @default("NGN")
+  status      String   @default("pending")
+  message     String?
+  anonymous   Boolean  @default(false)
+  campaignId  String
+  userId      String?
+  donorEmail  String?
+  donorName   String?
+  reference   String   @unique
+  paymentMethod String?
+  createdAt   DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id])
+}
+
+model Activity {
+  id         String   @id @default(cuid())
+  userId     String
+  type       String
+  description String?
+  campaignId String?
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+}
