@@ -83,7 +83,7 @@ export default function BrowseContent() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-gray-900 focus:outline-none focus:border-emerald-500"
+            className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-gray-900 focus:outline-none focus:border-pink-500"
           >
             {categories.map((cat) => (
               <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -92,7 +92,7 @@ export default function BrowseContent() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-gray-900 focus:outline-none focus:border-emerald-500"
+            className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-gray-900 focus:outline-none focus:border-pink-500"
           >
             {sortOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -129,7 +129,7 @@ export default function BrowseContent() {
               >
                 <Link href={`/campaign/${campaign.slug}`}>
                   <Card className="overflow-hidden h-full">
-                    <div className={`h-48 ${campaign.coverImage ? "" : "bg-gradient-to-br from-emerald-100 to-amber-100"} flex items-center justify-center`}>
+                    <div className={`h-48 ${campaign.coverImage ? "" : "bg-pink-100"} flex items-center justify-center`}>
                       {campaign.coverImage ? (
                         <img src={campaign.coverImage} alt={campaign.title} className="w-full h-full object-cover" />
                       ) : (
@@ -158,7 +158,7 @@ export default function BrowseContent() {
                         </div>
                         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full"
+                            className="h-full bg-pink-500 rounded-full"
                             style={{ width: `${progressPercentage(campaign.raisedAmount, campaign.goalAmount)}%` }}
                           />
                         </div>

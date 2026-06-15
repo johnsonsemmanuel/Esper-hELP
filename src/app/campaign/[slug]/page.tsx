@@ -98,7 +98,7 @@ export default function CampaignDetailPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-100 to-amber-100">
+            <div className="relative rounded-3xl overflow-hidden bg-pink-100">
               {campaign.videoUrl ? (
                 <div className="aspect-video">
                   <iframe
@@ -216,7 +216,7 @@ export default function CampaignDetailPage() {
                       onClick={() => setDonationAmount(amount.toString())}
                       className={`py-2 px-3 rounded-xl text-sm font-semibold border-2 transition-all ${
                         donationAmount === amount.toString()
-                          ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                          ? "border-pink-500 bg-pink-50 text-pink-700"
                           : "border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
@@ -266,7 +266,7 @@ export default function CampaignDetailPage() {
                   type="checkbox"
                   checked={anonymous}
                   onChange={(e) => setAnonymous(e.target.checked)}
-                  className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
                 />
                 Donate anonymously
               </label>
@@ -334,7 +334,7 @@ export default function CampaignDetailPage() {
             {campaign.donations.filter((d: any) => d.status === "successful").slice(0, 6).map((donation: any) => (
               <Card key={donation.id} hover={false} className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-amber-400 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold text-sm">
                     {(donation.donorName || "A")[0]}
                   </div>
                   <div>

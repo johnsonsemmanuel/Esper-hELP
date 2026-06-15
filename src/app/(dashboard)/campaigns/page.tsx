@@ -71,7 +71,7 @@ export default function MyCampaignsPage() {
               <Card key={campaign.id} className="p-5">
                 <div className="flex items-start gap-4">
                   <div className={`w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden ${
-                    campaign.coverImage ? "" : "bg-gradient-to-br from-emerald-100 to-amber-100 flex items-center justify-center"
+                    campaign.coverImage ? "" : "bg-pink-100 flex items-center justify-center"
                   }`}>
                     {campaign.coverImage ? (
                       <img src={campaign.coverImage} alt="" className="w-full h-full object-cover" />

@@ -16,7 +16,7 @@ const stats = [
 const categories = [
   { name: "Business & Startup", icon: "🚀", color: "bg-blue-50 text-blue-600", slug: "business-startup" },
   { name: "Community & Social", icon: "🤝", color: "bg-purple-50 text-purple-600", slug: "community-social" },
-  { name: "Education & Training", icon: "📚", color: "bg-amber-50 text-amber-600", slug: "education-training" },
+  { name: "Education & Training", icon: "📚", color: "bg-pink-50 text-pink-600", slug: "education-training" },
   { name: "Health & Medical", icon: "❤️", color: "bg-red-50 text-red-600", slug: "health-medical" },
   { name: "Agriculture", icon: "🌱", color: "bg-green-50 text-green-600", slug: "agriculture-farming" },
   { name: "Technology", icon: "💻", color: "bg-cyan-50 text-cyan-600", slug: "technology-innovation" },
@@ -45,10 +45,8 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-emerald-900 to-gray-900">
+      <section ref={heroRef} className="relative min-h-[90vh] flex items-center overflow-hidden bg-gray-900">
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-500/20 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent" />
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
         </motion.div>
 
@@ -59,10 +57,10 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-500/10 border border-pink-500/20 mb-6"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-sm font-medium text-emerald-300">Trusted across Africa</span>
+                <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+                <span className="text-sm font-medium text-pink-300">Trusted across Africa</span>
               </motion.div>
 
               <motion.h1
@@ -72,7 +70,7 @@ export default function HomePage() {
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
               >
                 Raise Funds for What{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-400">
+                <span className="text-pink-400">
                   Matters Most
                 </span>
               </motion.h1>
@@ -130,13 +128,13 @@ export default function HomePage() {
               className="hidden lg:block relative"
             >
               <div className="relative">
-                <div className="absolute -top-4 -left-4 w-72 h-72 bg-emerald-500/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-8 -right-8 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+                <div className="absolute -top-4 -left-4 w-72 h-72 bg-pink-500/20 rounded-full blur-3xl" />
+                <div className="absolute -bottom-8 -right-8 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
                 <div className="relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50 p-8">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 pb-4 border-b border-gray-700/50">
-                      <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                        <span className="text-emerald-400 text-lg">₦</span>
+                      <div className="w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center">
+                        <span className="text-pink-400 text-lg">₦</span>
                       </div>
                       <div>
                         <p className="text-white font-semibold">TechUp Africa</p>
@@ -149,19 +147,19 @@ export default function HomePage() {
                         <span className="text-white font-semibold">₦12,450,000</span>
                       </div>
                       <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-                        <div className="w-3/4 h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full" />
+                        <div className="w-3/4 h-full bg-pink-500 rounded-full" />
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-400">Goal: ₦15,000,000</span>
-                        <span className="text-emerald-400">83%</span>
+                        <span className="text-pink-400">83%</span>
                       </div>
                     </div>
                     <div className="flex -space-x-2 pt-2">
                       {[1, 2, 3, 4].map((i) => (
                         <div key={i} className="w-8 h-8 rounded-full bg-gray-600 border-2 border-gray-800" />
                       ))}
-                      <div className="w-8 h-8 rounded-full bg-emerald-500/20 border-2 border-gray-800 flex items-center justify-center">
-                        <span className="text-emerald-400 text-xs font-semibold">+42</span>
+                      <div className="w-8 h-8 rounded-full bg-pink-500/20 border-2 border-gray-800 flex items-center justify-center">
+                        <span className="text-pink-400 text-xs font-semibold">+42</span>
                       </div>
                     </div>
                   </div>
@@ -242,19 +240,19 @@ export default function HomePage() {
                 step: "01",
                 title: "Create Your Campaign",
                 desc: "Tell your story, set your goal, and add photos or videos. Takes less than 10 minutes.",
-                color: "from-emerald-500 to-emerald-600",
+                color: "bg-pink-500",
               },
               {
                 step: "02",
                 title: "Share With Supporters",
                 desc: "Share your campaign via WhatsApp, social media, and email. We help you reach more people.",
-                color: "from-amber-500 to-amber-600",
+                color: "bg-pink-600",
               },
               {
                 step: "03",
                 title: "Receive Funds",
                 desc: "Withdraw funds directly to your bank account or mobile money. Multiple payout options.",
-                color: "from-emerald-600 to-emerald-700",
+                color: "bg-pink-700",
               },
             ].map((item, index) => (
               <motion.div
@@ -266,7 +264,7 @@ export default function HomePage() {
                 className="relative"
               >
                 <div className="bg-gray-50 rounded-3xl p-8 h-full border border-gray-100">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6`}>
+                  <div className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center mb-6`}>
                     <span className="text-white font-bold text-lg">{item.step}</span>
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
@@ -310,12 +308,12 @@ export default function HomePage() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card className="overflow-hidden h-full">
-                  <div className="h-48 bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                  <div className="h-48 bg-pink-100 flex items-center justify-center">
                     <span className="text-6xl opacity-30">📸</span>
                   </div>
                   <CardContent>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                      <span className="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">
                         {campaign.category}
                       </span>
                     </div>
@@ -331,7 +329,7 @@ export default function HomePage() {
                           whileInView={{ width: `${campaign.progress}%` }}
                           viewport={{ once: true }}
                           transition={{ duration: 1, delay: 0.3 }}
-                          className="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full"
+                          className="h-full bg-pink-500 rounded-full"
                         />
                       </div>
                       <div className="flex justify-between text-xs text-gray-400">
@@ -348,18 +346,17 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-br from-emerald-600 to-emerald-800 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-amber-500/20 via-transparent to-transparent" />
+      <section className="py-20 bg-pink-700 relative overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Bring Your Project to Life?
             </h2>
-            <p className="text-emerald-100 mb-8 max-w-lg mx-auto">
+            <p className="text-pink-100 mb-8 max-w-lg mx-auto">
               Join thousands of African businesses and creators who have raised funds on hELP Fund.
             </p>
             <Link href="/register">
-              <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 text-base px-10">
+              <Button size="lg" className="bg-white text-pink-700 hover:bg-pink-50 text-base px-10">
                 Start Your Campaign Free
               </Button>
             </Link>

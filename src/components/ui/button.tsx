@@ -11,9 +11,9 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, "children"> {
 }
 
 const variantStyles: Record<string, string> = {
-  primary: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/25",
-  secondary: "bg-amber-500 text-white hover:bg-amber-600 shadow-lg shadow-amber-500/25",
-  outline: "border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50",
+  primary: "bg-pink-600 text-white hover:bg-pink-700",
+  secondary: "bg-pink-500 text-white hover:bg-pink-600",
+  outline: "border-2 border-pink-600 text-pink-600 hover:bg-pink-50",
   ghost: "text-gray-600 hover:bg-gray-100",
   danger: "bg-red-600 text-white hover:bg-red-700",
 }

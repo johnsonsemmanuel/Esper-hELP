@@ -18,7 +18,7 @@ export function Progress({ value, className = "", size = "md" }: ProgressProps) 
         animate={{ width: `${Math.min(value, 100)}%` }}
         transition={{ duration: 1, ease: "easeOut" }}
         className={`h-full rounded-full ${
-          value >= 100 ? "bg-emerald-500" : value >= 50 ? "bg-amber-500" : "bg-emerald-500"
+          "bg-pink-500"
         }`}
       />
     </div>

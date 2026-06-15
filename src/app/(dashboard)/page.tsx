@@ -65,8 +65,8 @@ export default function DashboardPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { label: "Total Campaigns", value: stats.totalCampaigns.toString(), color: "bg-emerald-50 text-emerald-600", icon: "📋" },
-            { label: "Total Raised", value: formatCurrency(stats.totalRaised), color: "bg-amber-50 text-amber-600", icon: "💰" },
+            { label: "Total Campaigns", value: stats.totalCampaigns.toString(), color: "bg-pink-50 text-pink-600", icon: "📋" },
+            { label: "Total Raised", value: formatCurrency(stats.totalRaised), color: "bg-pink-50 text-pink-600", icon: "💰" },
             { label: "Total Supporters", value: stats.totalDonors.toString(), color: "bg-blue-50 text-blue-600", icon: "👥" },
             { label: "Active Campaigns", value: stats.activeCampaigns.toString(), color: "bg-purple-50 text-purple-600", icon: "⚡" },
           ].map((stat) => (
@@ -86,7 +86,7 @@ export default function DashboardPage() {
 
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Your Campaigns</h2>
-          <Link href="/dashboard/campaigns" className="text-sm text-emerald-600 font-semibold hover:text-emerald-700">
+          <Link href="/dashboard/campaigns" className="text-sm text-pink-600 font-semibold hover:text-pink-700">
             View All
           </Link>
         </div>
@@ -105,7 +105,7 @@ export default function DashboardPage() {
             {campaigns.map((campaign) => (
               <Card key={campaign.id} className="p-5">
                 <div className="flex items-start gap-4">
-                  <div className={`w-20 h-20 rounded-xl flex-shrink-0 ${campaign.coverImage ? "" : "bg-gradient-to-br from-emerald-100 to-amber-100"} flex items-center justify-center overflow-hidden`}>
+                  <div className={`w-20 h-20 rounded-xl flex-shrink-0 ${campaign.coverImage ? "" : "bg-pink-100"} flex items-center justify-center overflow-hidden`}>
                     {campaign.coverImage ? (
                       <img src={campaign.coverImage} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -133,7 +133,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full"
+                          className="h-full bg-pink-500 rounded-full"
                           style={{ width: `${progressPercentage(campaign.raisedAmount, campaign.goalAmount)}%` }}
                         />
                       </div>

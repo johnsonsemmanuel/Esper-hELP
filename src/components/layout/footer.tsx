@@ -27,11 +27,11 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-pink-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">H</span>
               </div>
               <span className="font-bold text-xl text-white">
-                hELP<span className="text-emerald-500">Fund</span>
+                hELP<span className="text-pink-500">Fund</span>
               </span>
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed">
@@ -44,7 +44,7 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.platform.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm hover:text-emerald-400 transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-pink-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -57,7 +57,7 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm hover:text-emerald-400 transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-pink-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -70,7 +70,7 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.categories.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm hover:text-emerald-400 transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-pink-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>

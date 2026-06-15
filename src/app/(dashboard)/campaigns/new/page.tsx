@@ -119,7 +119,7 @@ export default function CreateCampaignPage() {
             <div key={s} className="flex items-center gap-2 flex-1">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                  i <= step ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-400"
+                  i <= step ? "bg-pink-600 text-white" : "bg-gray-100 text-gray-400"
                 }`}
               >
                 {i + 1}
@@ -128,7 +128,7 @@ export default function CreateCampaignPage() {
                 {s}
               </span>
               {i < steps.length - 1 && (
-                <div className={`flex-1 h-0.5 ${i < step ? "bg-emerald-600" : "bg-gray-200"}`} />
+                <div className={`flex-1 h-0.5 ${i < step ? "bg-pink-600" : "bg-gray-200"}`} />
               )}
             </div>
           ))}
@@ -164,7 +164,7 @@ export default function CreateCampaignPage() {
 
             {step === 1 && (
               <div className="space-y-5">
-                <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 text-sm text-amber-700 mb-4">
+                <div className="p-4 bg-pink-50 rounded-xl border border-pink-200 text-sm text-pink-700 mb-4">
                   Add media to make your campaign stand out. Campaigns with images raise 5x more funds.
                 </div>
                 <Input
@@ -268,7 +268,7 @@ export default function CreateCampaignPage() {
                     <p className="text-gray-700 text-sm leading-relaxed line-clamp-4">{form.story}</p>
                   </div>
                 </div>
-                <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-sm text-emerald-700">
+                <div className="p-4 bg-pink-50 rounded-xl border border-pink-200 text-sm text-pink-700">
                   By publishing, you agree to our Terms of Service and confirm that all information is accurate.
                 </div>
               </div>
