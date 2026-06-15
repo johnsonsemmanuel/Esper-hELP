@@ -24,9 +24,9 @@ const categories = [
 ]
 
 const currencies = [
+  { value: "GHS", label: "₵ GHS - Ghanaian Cedi" },
   { value: "NGN", label: "₦ NGN - Nigerian Naira" },
   { value: "KES", label: "KSh KES - Kenyan Shilling" },
-  { value: "GHS", label: "₵ GHS - Ghanaian Cedi" },
   { value: "ZAR", label: "R ZAR - South African Rand" },
   { value: "USD", label: "$ USD - US Dollar" },
   { value: "EUR", label: "€ EUR - Euro" },
@@ -44,7 +44,7 @@ export default function CreateCampaignPage() {
     title: "",
     story: "",
     goalAmount: "",
-    currency: "NGN",
+    currency: "GHS",
     categoryId: "",
     location: "",
     country: "",

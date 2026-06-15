@@ -2,7 +2,7 @@ export function cn(...inputs: (string | undefined | null | false)[]) {
   return inputs.filter(Boolean).join(" ")
 }
 
-export function formatCurrency(amount: number, currency = "NGN"): string {
+export function formatCurrency(amount: number, currency = "GHS"): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,

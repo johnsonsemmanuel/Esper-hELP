@@ -79,7 +79,7 @@ model Campaign {
   story       String
   goalAmount  Float
   raisedAmount Float   @default(0)
-  currency    String   @default("NGN")
+  currency    String   @default("GHS")
   status      String   @default("draft")
   coverImage  String?
   videoUrl    String?
@@ -123,7 +123,7 @@ model CampaignUpdate {
 model Donation {
   id          String   @id @default(cuid())
   amount      Float
-  currency    String   @default("NGN")
+  currency    String   @default("GHS")
   status      String   @default("pending")
   message     String?
   anonymous   Boolean  @default(false)

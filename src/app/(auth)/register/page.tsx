@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const userTypes = [
-  { value: "individual", label: "Individual", description: "Raising funds for a personal cause or project" },
+  { value: "individual", label: "Individual", description: "Raising funds for a personal project or passion" },
   { value: "business", label: "Business Owner", description: "Funding a business, startup, or agency" },
   { value: "nonprofit", label: "Nonprofit / NGO", description: "Raising for a charitable organization" },
   { value: "creator", label: "Creator / Artist", description: "Funding creative projects and art" },

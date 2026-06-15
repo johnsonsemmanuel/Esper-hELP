@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         slug,
         story,
         goalAmount,
-        currency: currency || "NGN",
+        currency: currency || "GHS",
         status: "active",
         categoryId: category?.id || null,
         location,

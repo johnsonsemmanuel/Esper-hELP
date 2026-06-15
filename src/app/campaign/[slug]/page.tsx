@@ -10,7 +10,18 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { ImageIcon } from "lucide-react"
 import { formatCurrency, timeAgo, progressPercentage } from "@/lib/utils"
+
+const currencySymbols: Record<string, string> = {
+  GHS: "₵",
+  NGN: "₦",
+  KES: "KSh ",
+  ZAR: "R",
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+}
 
 export default function CampaignDetailPage() {
   const params = useParams()
@@ -114,7 +125,7 @@ export default function CampaignDetailPage() {
                 </div>
               ) : (
                 <div className="aspect-video flex items-center justify-center">
-                  <span className="text-8xl opacity-30">📸</span>
+                  <ImageIcon className="w-20 h-20 text-pink-300 opacity-30" />
                 </div>
               )}
             </div>
@@ -220,7 +231,7 @@ export default function CampaignDetailPage() {
                           : "border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
-                      ₦{amount.toLocaleString()}
+                      {(currencySymbols[campaign.currency] || "₵")}{amount.toLocaleString()}
                     </button>
                   ))}
                 </div>
