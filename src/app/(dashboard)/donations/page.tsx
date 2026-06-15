@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { formatCurrency, timeAgo } from "@/lib/utils"
 
 export default function DonationsPage() {
-  const { data: session, status } = useSession()
+  const { status } = useAuth()
   const router = useRouter()
   const [donations, setDonations] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -17,7 +17,7 @@ export default function DonationsPage() {
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login")
     if (status === "authenticated") fetchDonations()
-  }, [status])
+  }, [status, router])
 
   async function fetchDonations() {
     try {

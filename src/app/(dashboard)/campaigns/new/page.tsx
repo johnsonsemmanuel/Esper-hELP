@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -37,7 +37,7 @@ const steps = ["Basic Info", "Story & Media", "Goal & Category", "Review"]
 
 export default function CreateCampaignPage() {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { status } = useAuth()
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
@@ -53,6 +53,11 @@ export default function CreateCampaignPage() {
     videoUrl: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  if (status === "unauthenticated") {
+    router.push("/login")
+    return null
+  }
 
   function validateStep(): boolean {
     const newErrors: Record<string, string> = {}
@@ -103,18 +108,12 @@ export default function CreateCampaignPage() {
     }
   }
 
-  if (!session) {
-    router.push("/login")
-    return null
-  }
-
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Start a Campaign</h1>
         <p className="text-gray-500 mb-8">Tell your story and raise funds for what matters.</p>
 
-        {/* Steps Progress */}
         <div className="flex items-center gap-2 mb-10">
           {steps.map((s, i) => (
             <div key={s} className="flex items-center gap-2 flex-1">
@@ -135,7 +134,6 @@ export default function CreateCampaignPage() {
           ))}
         </div>
 
-        {/* Form Steps */}
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -276,16 +274,12 @@ export default function CreateCampaignPage() {
               </div>
             )}
 
-            {/* Navigation Buttons */}
             <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
               <Button variant="ghost" onClick={prevStep} disabled={step === 0}>
                 Back
               </Button>
               <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => router.push("/dashboard")}
-                >
+                <Button variant="outline" onClick={() => router.push("/dashboard")}>
                   Save Draft
                 </Button>
                 {step < steps.length - 1 ? (

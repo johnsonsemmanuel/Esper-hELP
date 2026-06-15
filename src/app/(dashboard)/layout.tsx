@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -11,7 +11,7 @@ const sidebarLinks = [
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession()
+  const { user } = useAuth()
   const pathname = usePathname()
 
   return (
@@ -19,11 +19,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="w-64 bg-white border-r border-gray-100 hidden md:block p-6">
         <div className="flex items-center gap-3 mb-8 pb-6 border-b border-gray-100">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-amber-400 flex items-center justify-center text-white font-bold">
-            {(session?.user?.name || "U")[0]}
+            {(user?.name || "U")[0]}
           </div>
           <div className="min-w-0">
-            <p className="font-semibold text-gray-900 text-sm truncate">{session?.user?.name}</p>
-            <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
+            <p className="font-semibold text-gray-900 text-sm truncate">{user?.name}</p>
+            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
           </div>
         </div>
 

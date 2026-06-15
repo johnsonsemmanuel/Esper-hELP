@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { getServerSession } from "next-auth"
+import { getSession } from "@/lib/auth"
 import { generateReference } from "@/lib/utils"
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getSession()
     const body = await req.json()
     const { campaignId, amount, currency, donorName, donorEmail, message, anonymous } = body
 
@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Campaign not available" }, { status: 400 })
     }
 
-    const user = session?.user?.email
-      ? await prisma.user.findUnique({ where: { email: session.user.email as string } })
+    const user = session?.email
+      ? await prisma.user.findUnique({ where: { email: session.email } })
       : null
 
     const reference = generateReference()

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -14,7 +14,7 @@ import { formatCurrency, timeAgo, progressPercentage } from "@/lib/utils"
 
 export default function CampaignDetailPage() {
   const params = useParams()
-  const { data: session } = useSession()
+  const { user } = useAuth()
   const [campaign, setCampaign] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [donationAmount, setDonationAmount] = useState("")
@@ -96,10 +96,8 @@ export default function CampaignDetailPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            {/* Media */}
             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-100 to-amber-100">
               {campaign.videoUrl ? (
                 <div className="aspect-video">
@@ -121,7 +119,6 @@ export default function CampaignDetailPage() {
               )}
             </div>
 
-            {/* Campaign Info */}
             <div className="mt-6">
               <div className="flex items-center gap-3 mb-3">
                 {campaign.category && <Badge variant="info">{campaign.category.name}</Badge>}
@@ -142,7 +139,6 @@ export default function CampaignDetailPage() {
             </div>
           </motion.div>
 
-          {/* Story */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -158,7 +154,6 @@ export default function CampaignDetailPage() {
             </Card>
           </motion.div>
 
-          {/* Updates */}
           {campaign.updates?.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -182,7 +177,6 @@ export default function CampaignDetailPage() {
           )}
         </div>
 
-        {/* Sidebar - Donation Widget */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -239,7 +233,7 @@ export default function CampaignDetailPage() {
                 />
               </div>
 
-              {!session && (
+              {!user && (
                 <>
                   <Input
                     label="Your Name"
@@ -298,7 +292,6 @@ export default function CampaignDetailPage() {
             </div>
           </Card>
 
-          {/* Share */}
           <Card className="p-6 mt-6">
             <h3 className="font-semibold text-gray-900 mb-4">Share This Campaign</h3>
             <div className="flex gap-2">
@@ -329,7 +322,6 @@ export default function CampaignDetailPage() {
         </motion.div>
       </div>
 
-      {/* Recent Donors */}
       {campaign.donations?.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}

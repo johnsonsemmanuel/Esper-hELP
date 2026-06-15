@@ -1,15 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export default function LoginPage() {
   const router = useRouter()
+  const { signIn } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -20,14 +21,9 @@ export default function LoginPage() {
     setLoading(true)
     setError("")
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    })
-
-    if (result?.error) {
-      setError("Invalid email or password")
+    const result = await signIn(email, password)
+    if (result.error) {
+      setError(result.error)
       setLoading(false)
     } else {
       router.push("/dashboard")

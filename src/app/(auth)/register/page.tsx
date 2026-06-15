@@ -4,10 +4,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { hash } from "bcryptjs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { prisma } from "@/lib/prisma"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -29,19 +27,19 @@ export default function RegisterPage() {
     }
 
     try {
-      const hashedPassword = await hash(password, 12)
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password: hashedPassword }),
+        body: JSON.stringify({ name, email, password }),
       })
 
+      const data = await res.json()
       if (!res.ok) {
-        const data = await res.json()
         throw new Error(data.error || "Registration failed")
       }
 
-      router.push("/login?registered=true")
+      router.push("/dashboard")
+      router.refresh()
     } catch (err: any) {
       setError(err.message)
     } finally {

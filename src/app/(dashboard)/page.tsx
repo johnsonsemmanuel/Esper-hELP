@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { formatCurrency, timeAgo, progressPercentage } from "@/lib/utils"
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession()
+  const { user, status } = useAuth()
   const router = useRouter()
   const [campaigns, setCampaigns] = useState<any[]>([])
   const [stats, setStats] = useState({ totalCampaigns: 0, totalRaised: 0, totalDonors: 0, activeCampaigns: 0 })
@@ -22,13 +22,13 @@ export default function DashboardPage() {
     if (status === "authenticated") {
       fetchDashboard()
     }
-  }, [status])
+  }, [status, router])
 
   async function fetchDashboard() {
     try {
       const res = await fetch("/api/dashboard")
       const data = await res.json()
-      setCampaigns(data.campaigns)
+      setCampaigns(data.campaigns || [])
       setStats(data.stats)
     } catch (err) {
       console.error(err)
@@ -56,14 +56,13 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-500 mt-1">Welcome back, {session?.user?.name}</p>
+            <p className="text-gray-500 mt-1">Welcome back, {user?.name}</p>
           </div>
           <Link href="/dashboard/campaigns/new">
             <Button>New Campaign</Button>
           </Link>
         </div>
 
-        {/* Stats */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
             { label: "Total Campaigns", value: stats.totalCampaigns.toString(), color: "bg-emerald-50 text-emerald-600", icon: "📋" },
@@ -85,7 +84,6 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Campaigns */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Your Campaigns</h2>
           <Link href="/dashboard/campaigns" className="text-sm text-emerald-600 font-semibold hover:text-emerald-700">

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { formatCurrency, timeAgo, progressPercentage } from "@/lib/utils"
 
 export default function MyCampaignsPage() {
-  const { data: session, status } = useSession()
+  const { status } = useAuth()
   const router = useRouter()
   const [campaigns, setCampaigns] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -19,7 +19,7 @@ export default function MyCampaignsPage() {
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login")
     if (status === "authenticated") fetchCampaigns()
-  }, [status])
+  }, [status, router])
 
   async function fetchCampaigns() {
     try {

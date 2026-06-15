@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { useSession, signOut } from "next-auth/react"
+import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 
 const navLinks = [
@@ -15,7 +15,7 @@ const navLinks = [
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { data: session } = useSession()
+  const { user, status, signOut } = useAuth()
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
@@ -43,7 +43,7 @@ export function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            {session ? (
+            {status === "authenticated" ? (
               <>
                 <Link href="/dashboard">
                   <Button variant="ghost" size="sm">Dashboard</Button>
@@ -102,7 +102,7 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="pt-3 border-t border-gray-100 space-y-2">
-                {session ? (
+                {status === "authenticated" ? (
                   <>
                     <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
                       <Button variant="outline" className="w-full">Dashboard</Button>
