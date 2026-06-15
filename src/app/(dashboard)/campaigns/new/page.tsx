@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select } from "@/components/ui/select"
 import { slugify } from "@/lib/utils"
+import { Briefcase, Heart } from "lucide-react"
 
 const categories = [
   { value: "business-startup", label: "Business & Startup" },
@@ -40,6 +41,7 @@ export default function CreateCampaignPage() {
   const { status } = useAuth()
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [campaignType, setCampaignType] = useState<"business" | "personal" | "">("")
   const [form, setForm] = useState({
     title: "",
     story: "",
@@ -62,6 +64,7 @@ export default function CreateCampaignPage() {
   function validateStep(): boolean {
     const newErrors: Record<string, string> = {}
     if (step === 0) {
+      if (!campaignType) newErrors.campaignType = "Select whether this is for your business or personal needs"
       if (!form.title.trim()) newErrors.title = "Title is required"
       if (!form.story.trim()) newErrors.story = "Story is required"
       if (form.story.length < 50) newErrors.story = "Story must be at least 50 characters"
@@ -93,6 +96,7 @@ export default function CreateCampaignPage() {
         body: JSON.stringify({
           ...form,
           slug,
+          campaignType,
           goalAmount: parseFloat(form.goalAmount),
           deadline: form.deadline || null,
         }),
@@ -144,6 +148,49 @@ export default function CreateCampaignPage() {
           >
             {step === 0 && (
               <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    What is this campaign for? <span className="text-pink-500">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setCampaignType("business")}
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${
+                        campaignType === "business"
+                          ? "border-pink-500 bg-pink-50"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Briefcase className={`h-5 w-5 ${campaignType === "business" ? "text-pink-600" : "text-gray-400"}`} />
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">My Business</div>
+                          <div className="text-xs text-gray-500 mt-0.5">Fund a business, startup, or agency</div>
+                        </div>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCampaignType("personal")}
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${
+                        campaignType === "personal"
+                          ? "border-pink-500 bg-pink-50"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Heart className={`h-5 w-5 ${campaignType === "personal" ? "text-pink-600" : "text-gray-400"}`} />
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">Personal Need</div>
+                          <div className="text-xs text-gray-500 mt-0.5">Raise funds for a personal cause</div>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                  {errors.campaignType && <p className="text-xs text-red-500 mt-1">{errors.campaignType}</p>}
+                </div>
+
                 <Input
                   label="Campaign Title"
                   value={form.title}
@@ -237,6 +284,10 @@ export default function CreateCampaignPage() {
                   <div className="flex justify-between py-3 border-b border-gray-100">
                     <span className="text-gray-500">Title</span>
                     <span className="font-semibold text-gray-900 text-right max-w-md">{form.title}</span>
+                  </div>
+                  <div className="flex justify-between py-3 border-b border-gray-100">
+                    <span className="text-gray-500">Campaign Type</span>
+                    <span className="font-semibold text-gray-900">{campaignType === "business" ? "My Business" : "Personal Need"}</span>
                   </div>
                   <div className="flex justify-between py-3 border-b border-gray-100">
                     <span className="text-gray-500">Goal</span>

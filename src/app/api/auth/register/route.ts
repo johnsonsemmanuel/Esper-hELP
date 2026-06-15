@@ -5,7 +5,7 @@ import { createToken } from "@/lib/auth"
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json()
+    const { name, email, password, userType, goal, location, referral, businessName, businessRegNumber, businessTin, businessAddress } = await req.json()
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
@@ -22,7 +22,19 @@ export async function POST(req: Request) {
 
     const hashedPassword = await hash(password, 12)
     const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword },
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        userType: userType || "personal",
+        goal,
+        location,
+        referral,
+        businessName,
+        businessRegNumber,
+        businessTin,
+        businessAddress,
+      },
     })
 
     const token = await createToken({

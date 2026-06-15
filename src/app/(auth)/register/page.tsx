@@ -4,13 +4,13 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowRight, Check, ChevronLeft } from "lucide-react"
+import { ArrowRight, Check, ChevronLeft, Building2, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const userTypes = [
-  { value: "individual", label: "Individual", description: "Raising funds for a personal project or passion" },
   { value: "business", label: "Business Owner", description: "Funding a business, startup, or agency" },
+  { value: "individual", label: "Individual", description: "Raising funds for a personal project or passion" },
   { value: "nonprofit", label: "Nonprofit / NGO", description: "Raising for a charitable organization" },
   { value: "creator", label: "Creator / Artist", description: "Funding creative projects and art" },
 ]
@@ -33,7 +33,7 @@ const hearAbout = [
   { value: "other", label: "Other" },
 ]
 
-type Step = "questions" | "account" | "review"
+type Step = "questions" | "business" | "account" | "review"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -47,10 +47,32 @@ export default function RegisterPage() {
   const [location, setLocation] = useState("")
   const [referral, setReferral] = useState("")
 
+  // Business details
+  const [businessName, setBusinessName] = useState("")
+  const [businessRegNumber, setBusinessRegNumber] = useState("")
+  const [businessTin, setBusinessTin] = useState("")
+  const [businessAddress, setBusinessAddress] = useState("")
+
   // Account info
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const isBusiness = userType === "business"
+  const businessComplete = !isBusiness || (businessName && businessRegNumber && businessTin && businessAddress)
+  const questionsComplete = userType && goal && location && referral
+  const accountComplete = name && email && password.length >= 8
+
+  function getStepProgress(): string {
+    if (step === "questions") return "25%"
+    if (step === "business") return "50%"
+    if (step === "account") return "75%"
+    return "100%"
+  }
+
+  function handleNextBusiness() {
+    setStep("account")
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -75,6 +97,10 @@ export default function RegisterPage() {
           goal,
           location,
           referral,
+          businessName: isBusiness ? businessName : undefined,
+          businessRegNumber: isBusiness ? businessRegNumber : undefined,
+          businessTin: isBusiness ? businessTin : undefined,
+          businessAddress: isBusiness ? businessAddress : undefined,
         }),
       })
 
@@ -90,9 +116,6 @@ export default function RegisterPage() {
     }
   }
 
-  const questionsComplete = userType && goal && location && referral
-  const accountComplete = name && email && password.length >= 8
-
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-pink-50 p-4 py-12">
       <motion.div
@@ -107,9 +130,7 @@ export default function RegisterPage() {
             <motion.div
               className="h-full bg-pink-500"
               initial={{ width: "0%" }}
-              animate={{
-                width: step === "questions" ? "33%" : step === "account" ? "66%" : "100%",
-              }}
+              animate={{ width: getStepProgress() }}
               transition={{ duration: 0.4 }}
             />
           </div>
@@ -120,7 +141,11 @@ export default function RegisterPage() {
               <div>
                 {step !== "questions" && (
                   <button
-                    onClick={() => setStep(step === "account" ? "questions" : "account")}
+                    onClick={() => {
+                      if (step === "business") setStep("questions")
+                      else if (step === "account") setStep(isBusiness ? "business" : "questions")
+                      else if (step === "review") setStep("account")
+                    }}
                     className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-2"
                   >
                     <ChevronLeft className="h-4 w-4" /> Back
@@ -128,21 +153,25 @@ export default function RegisterPage() {
                 )}
                 <h1 className="text-2xl font-bold text-gray-900">
                   {step === "questions" && "Tell us about yourself"}
+                  {step === "business" && "Business Details"}
                   {step === "account" && "Create your account"}
                   {step === "review" && "Review & finish"}
                 </h1>
                 <p className="text-gray-500 text-sm mt-1">
                   {step === "questions" && "Help us personalize your experience"}
+                  {step === "business" && "We need a few details to verify your business"}
                   {step === "account" && "Set up your login credentials"}
                   {step === "review" && "Make sure everything looks right"}
                 </p>
               </div>
               <div className="flex items-center gap-1 text-xs text-gray-400">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${step === "questions" ? "bg-pink-600 text-white" : "bg-pink-100 text-pink-600"}`}>1</span>
-                <div className={`w-6 h-0.5 ${step !== "questions" ? "bg-pink-300" : "bg-gray-200"}`} />
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${step === "account" ? "bg-pink-600 text-white" : step === "review" ? "bg-pink-100 text-pink-600" : "bg-gray-100 text-gray-400"}`}>2</span>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${["questions", "business", "account", "review"].indexOf(step) >= 0 ? "bg-pink-600 text-white" : "bg-pink-100 text-pink-600"}`}>1</span>
+                <div className={`w-6 h-0.5 ${["business", "account", "review"].includes(step) ? "bg-pink-300" : "bg-gray-200"}`} />
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${["business", "account", "review"].includes(step) ? "bg-pink-600 text-white" : "bg-gray-100 text-gray-400"}`}>2</span>
+                <div className={`w-6 h-0.5 ${["account", "review"].includes(step) ? "bg-pink-300" : "bg-gray-200"}`} />
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${["account", "review"].includes(step) ? "bg-pink-600 text-white" : "bg-gray-100 text-gray-400"}`}>3</span>
                 <div className={`w-6 h-0.5 ${step === "review" ? "bg-pink-300" : "bg-gray-200"}`} />
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${step === "review" ? "bg-pink-600 text-white" : "bg-gray-100 text-gray-400"}`}>3</span>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center ${step === "review" ? "bg-pink-600 text-white" : "bg-gray-100 text-gray-400"}`}>4</span>
               </div>
             </div>
 
@@ -220,7 +249,7 @@ export default function RegisterPage() {
                       <input
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        placeholder="Nigeria, Kenya, Ghana..."
+                        placeholder="Ghana, Nigeria, Kenya..."
                         className="flex h-10 w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 focus-visible:ring-offset-2"
                         required
                       />
@@ -252,7 +281,77 @@ export default function RegisterPage() {
                       type="button"
                       className="w-full"
                       disabled={!questionsComplete}
-                      onClick={() => setStep("account")}
+                      onClick={() => setStep(isBusiness ? "business" : "account")}
+                    >
+                      Continue
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </motion.div>
+                )}
+
+                {/* Step 1.5: Business Details (only for business users) */}
+                {step === "business" && (
+                  <motion.div
+                    key="business"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-5"
+                  >
+                    <div className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl border border-pink-100">
+                      <Building2 className="h-8 w-8 text-pink-600 flex-shrink-0" />
+                      <p className="text-sm text-pink-800">
+                        Business accounts require verification details. This information is kept secure and used only for compliance.
+                      </p>
+                    </div>
+
+                    <Input
+                      label="Business Name"
+                      value={businessName}
+                      onChange={(e) => setBusinessName(e.target.value)}
+                      placeholder="Your registered business name"
+                      required
+                    />
+                    <Input
+                      label="Business Registration Number"
+                      value={businessRegNumber}
+                      onChange={(e) => setBusinessRegNumber(e.target.value)}
+                      placeholder="e.g. RC-123456, BN-7890"
+                      required
+                    />
+                    <Input
+                      label="Tax Identification Number (TIN)"
+                      value={businessTin}
+                      onChange={(e) => setBusinessTin(e.target.value)}
+                      placeholder="e.g. TIN-1234567890"
+                      required
+                    />
+                    <Input
+                      label="Business Address"
+                      value={businessAddress}
+                      onChange={(e) => setBusinessAddress(e.target.value)}
+                      placeholder="Registered business address"
+                      required
+                    />
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Certificate of Incorporation / Business Document
+                      </label>
+                      <div className="flex items-center justify-center p-6 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 hover:border-pink-300 transition-colors cursor-pointer">
+                        <div className="text-center">
+                          <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
+                          <p className="text-sm text-gray-500">Upload business document (optional)</p>
+                          <p className="text-xs text-gray-400 mt-1">PDF, JPG or PNG</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      className="w-full"
+                      disabled={!businessComplete}
+                      onClick={handleNextBusiness}
                     >
                       Continue
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -333,6 +432,15 @@ export default function RegisterPage() {
                         </p>
                         <p className="text-sm text-gray-500">Location: {location}</p>
                       </div>
+                      {isBusiness && (
+                        <div className="border-t border-gray-200 pt-4">
+                          <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">Business</p>
+                          <p className="text-sm text-gray-900 mt-1">{businessName}</p>
+                          <p className="text-sm text-gray-500">Reg: {businessRegNumber}</p>
+                          <p className="text-sm text-gray-500">TIN: {businessTin}</p>
+                          <p className="text-sm text-gray-500">{businessAddress}</p>
+                        </div>
+                      )}
                     </div>
 
                     <Button type="submit" loading={loading} className="w-full">

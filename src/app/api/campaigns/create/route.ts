@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json()
-    const { title, slug, story, goalAmount, currency, categoryId, location, country, deadline, coverImage, videoUrl } = body
+    const { title, slug, story, goalAmount, currency, campaignType, categoryId, location, country, deadline, coverImage, videoUrl } = body
 
     const category = categoryId
       ? await prisma.category.findUnique({ where: { slug: categoryId } })
@@ -28,6 +28,7 @@ export async function POST(req: Request) {
         story,
         goalAmount,
         currency: currency || "GHS",
+        campaignType: campaignType || "personal",
         status: "active",
         categoryId: category?.id || null,
         location,

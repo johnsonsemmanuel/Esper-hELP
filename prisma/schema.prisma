@@ -17,6 +17,14 @@ model User {
   phone     String?
   bio       String?
   location  String?
+  userType  String   @default("personal")
+  goal      String?
+  referral  String?
+  businessName      String?
+  businessRegNumber String?
+  businessTin       String?
+  businessAddress   String?
+  businessDocUrl    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -81,6 +89,7 @@ model Campaign {
   raisedAmount Float   @default(0)
   currency    String   @default("GHS")
   status      String   @default("draft")
+  campaignType String  @default("personal")
   coverImage  String?
   videoUrl    String?
   location    String?
