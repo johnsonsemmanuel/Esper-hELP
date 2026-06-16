@@ -4,7 +4,8 @@ import { PrismaLibSql } from "@prisma/adapter-libsql"
 import { hash } from "bcryptjs"
 
 const dbUrl = process.env["DATABASE_URL"] || "file:./prisma/dev.db"
-const adapter = new PrismaLibSql({ url: dbUrl })
+const authToken = process.env["TURSO_AUTH_TOKEN"]
+const adapter = new PrismaLibSql(authToken ? { url: dbUrl, authToken } : { url: dbUrl })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
